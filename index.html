@@ -4,21 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="https://adsgram.ai/sdk-v1.js"></script>
+    <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
     <style>
-        body { font-family: sans-serif; text-align: center; padding: 40px 20px; background: #f4f7f9; }
+        body { font-family: sans-serif; text-align: center; padding: 50px; background: #f0f2f5; }
         .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        button { background: #0088cc; color: white; border: none; padding: 18px 30px; border-radius: 12px; cursor: pointer; font-size: 18px; font-weight: bold; width: 100%; }
-        #status { margin-top: 20px; font-weight: bold; }
-        #debug { margin-top: 15px; font-size: 12px; color: #ff0000; background: #ffebeb; padding: 10px; border-radius: 8px; display: none; }
+        button { background: #0088cc; color: white; border: none; padding: 15px 30px; border-radius: 12px; cursor: pointer; font-size: 18px; font-weight: bold; width: 100%; }
+        #status { margin-top: 20px; color: #666; font-size: 14px; }
     </style>
 </head>
 <body>
     <div class="card">
-        <h2>AdsGram Test Mode ✨</h2>
-        <button id="watchAdBtn">📺 Play Test Ad</button>
-        <p id="status" style="color: #666;">စမ်းသပ်ရန် ခလုတ်နှိပ်ပါ</p>
-        <div id="debug"></div>
+        <h2>AdsGram Reward ✨</h2>
+        <button id="watchAdBtn">📺 Watch Video Ad</button>
+        <p id="status">ကြော်ငြာကြည့်ရန် ခလုတ်နှိပ်ပါ</p>
     </div>
 
     <script>
@@ -26,28 +24,25 @@
         webapp.ready();
         webapp.expand();
 
-        // Test ID: int-0000 ကို အသုံးပြုထားပါသည်
-        const AdController = window.Adsgram.init({ blockId: "int-0000" }); 
+        // SDK Initialize လုပ်ခြင်း
+        const AdController = window.Adsgram.init({ blockId: "int-23469" });
 
         document.getElementById('watchAdBtn').onclick = () => {
             const statusBox = document.getElementById('status');
-            const debugBox = document.getElementById('debug');
-            
-            statusBox.innerText = "Loading...";
-            debugBox.style.display = "none";
+            statusBox.innerText = "ကြော်ငြာကို ရှာဖွေနေပါသည်...";
 
+            // Ad ပြသခြင်း
             AdController.show().then((result) => {
-                statusBox.innerText = "✅ ကြော်ငြာပြသမှု အောင်မြင်သည်!";
+                // ကြော်ငြာကို အဆုံးထိ ကြည့်ပြီးသွားသောအခါ
+                statusBox.innerText = "✅ ကြော်ငြာကြည့်ခြင်း အောင်မြင်ပါသည်။";
                 statusBox.style.color = "green";
+                webapp.showAlert("ဂုဏ်ယူပါတယ်! သင် Reward ရရှိပါပြီ။");
             }).catch((result) => {
-                // Console Error ကို Status မှာပါ ပြပေးမည်
-                statusBox.innerText = "❌ မအောင်မြင်ပါ";
+                // Error ဖြစ်ခြင်း သို့မဟုတ် အဆုံးထိမကြည့်ဘဲ ပိတ်လိုက်ခြင်း
+                console.error("Ad Error:", result);
+                statusBox.innerText = "❌ အမှားအယွင်း: " + (result.description || "Ad not completed");
                 statusBox.style.color = "red";
-                
-                debugBox.style.display = "block";
-                debugBox.innerText = "Error Info: " + (result.description || "No specific error description");
-                
-                console.error("Adsgram Error:", result);
+                webapp.showAlert("ကြော်ငြာကို အဆုံးထိကြည့်မှသာ Reward ရရှိမည်ဖြစ်သည်။");
             });
         };
     </script>
