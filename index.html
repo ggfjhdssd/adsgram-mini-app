@@ -1,35 +1,52 @@
 <!DOCTYPE html>
-<html>
+<html lang="my">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adsgram Mini App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://adsgram.ai/sdk-v1.js"></script>
     <style>
-        body { font-family: sans-serif; text-align: center; padding: 50px; background: #f0f2f5; }
-        button { background: #0088cc; color: white; border: none; padding: 15px 30px; border-radius: 12px; cursor: pointer; font-size: 16px; font-weight: bold; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 40px 20px; background: #f4f7f9; }
+        .container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h2 { color: #0088cc; }
+        button { background: #0088cc; color: white; border: none; padding: 18px 30px; border-radius: 12px; cursor: pointer; font-size: 18px; font-weight: bold; width: 100%; transition: 0.3s; }
+        button:active { transform: scale(0.98); }
+        #status { margin-top: 20px; font-size: 14px; color: #666; }
     </style>
 </head>
 <body>
-    <h2>AdsGram Money ✨</h2>
-    <button id="watchAdBtn">📺 Play Ad & Earn</button>
-    <p id="status" style="margin-top: 20px; color: #666;"></p>
+    <div class="container">
+        <h2>AdsGram Myanmar ✨</h2>
+        <p>ကြော်ငြာကြည့်ပြီး ဆုလာဘ်များ ရယူပါ</p>
+        <button id="watchAdBtn">📺 Play Video Ad</button>
+        <p id="status">ခလုတ်ကို နှိပ်ပြီး စတင်ပါ</p>
+    </div>
 
     <script>
         const webapp = window.Telegram.WebApp;
         webapp.ready();
-        const AdController = window.Adsgram.init({ blockId: "int-0000" }); // Test ID သုံးထားသည်
+        webapp.expand(); // Screen အပြည့်ဖွင့်မည်
+
+        // Adsgram Initialization with your real Block ID
+        const AdController = window.Adsgram.init({ blockId: "int-23465" }); 
 
         document.getElementById('watchAdBtn').onclick = () => {
-            document.getElementById('status').innerText = "Loading Ad...";
-            AdController.show().then(() => {
-                document.getElementById('status').innerText = "✅ အောင်မြင်ပါသည်!";
-                webapp.showAlert("Reward ရရှိပါပြီ!");
-            }).catch(() => {
-                document.getElementById('status').innerText = "❌ မအောင်မြင်ပါ။";
+            const statusBox = document.getElementById('status');
+            statusBox.innerText = "ကြော်ငြာကို ရှာဖွေနေပါသည်...";
+
+            AdController.show().then((result) => {
+                // ကြော်ငြာကြည့်တာ အောင်မြင်ခဲ့လျှင်
+                statusBox.innerText = "✅ ကြော်ငြာကြည့်ခြင်း အောင်မြင်ပါသည်။";
+                statusBox.style.color = "green";
+                webapp.showAlert("ဂုဏ်ယူပါတယ်! သင် Reward ရရှိပါပြီ။");
+            }).catch((result) => {
+                // ကြည့်နေတုန်း ပိတ်လိုက်လျှင် သို့မဟုတ် Error တက်လျှင်
+                statusBox.innerText = "❌ ကြော်ငြာမရှိပါ (သို့မဟုတ်) ကြည့်ရှုမှု မအောင်မြင်ပါ။";
+                statusBox.style.color = "red";
+                webapp.showAlert("ကြော်ငြာကို အဆုံးထိ ကြည့်ပေးရန် လိုအပ်ပါသည်။");
             });
         };
     </script>
 </body>
-</html>
-
+</html
