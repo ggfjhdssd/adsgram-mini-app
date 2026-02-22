@@ -6,33 +6,38 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://adsgram.ai/sdk-v1.js"></script>
     <style>
-        body { font-family: sans-serif; text-align: center; padding: 50px; background: #f0f2f5; }
-        .btn { background: #0088cc; color: white; border: none; padding: 15px 30px; border-radius: 12px; font-size: 18px; cursor: pointer; }
+        body { font-family: sans-serif; text-align: center; padding: 50px; background: #eee; }
+        .container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        button { background: #0088cc; color: white; border: none; padding: 15px 30px; border-radius: 10px; cursor: pointer; font-size: 16px; font-weight: bold; width: 100%; }
+        #status { margin-top: 20px; color: #555; }
     </style>
 </head>
 <body>
-    <h2>AdsGram Money ✨</h2>
-    <button class="btn" id="watchAdBtn">📺 Watch Video Ad</button>
-    <p id="status" style="margin-top: 20px;"></p>
+    <div class="container">
+        <h2>AdsGram Money ✨</h2>
+        <button id="watchAdBtn">📺 Watch Video Ad</button>
+        <p id="status">ခလုတ်ကို နှိပ်ပြီး စတင်ပါ</p>
+    </div>
 
     <script>
         const webapp = window.Telegram.WebApp;
         webapp.ready();
         webapp.expand();
 
-        // သင်ရရှိထားတဲ့ Block ID: int-23465 ကို ဤနေရာတွင် သုံးထားပါသည်
-        const AdController = window.Adsgram.init({ blockId: "int-23465" });
+        // Adsgram Initialization with Test Block ID: int-23469
+        const AdController = window.Adsgram.init({ blockId: "int-23469" });
 
         document.getElementById('watchAdBtn').onclick = () => {
-            document.getElementById('status').innerText = "Loading ad...";
-            
-            AdController.show().then((result) => {
-                document.getElementById('status').innerText = "✅ Done!";
+            const statusText = document.getElementById('status');
+            statusText.innerText = "ကြော်ငြာရှာဖွေနေပါသည်...";
+
+            AdController.show().then(() => {
+                statusText.innerText = "✅ အောင်မြင်ပါသည်!";
                 webapp.showAlert("Reward ရရှိပါပြီ!");
             }).catch((result) => {
+                statusText.innerText = "❌ မအောင်မြင်ပါ (သို့မဟုတ်) ကြော်ငြာမရှိပါ။";
                 console.error(result);
-                document.getElementById('status').innerText = "❌ Error: " + (result.description || "Ad not found");
-                webapp.showAlert("ကြော်ငြာမရှိသေးပါ (သို့မဟုတ်) အမှားအယွင်းရှိနေပါသည်။");
+                webapp.showAlert("ကြော်ငြာအဆုံးထိ ကြည့်ပေးရန် လိုအပ်ပါသည်။");
             });
         };
     </script>
